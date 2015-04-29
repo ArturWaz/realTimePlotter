@@ -26,7 +26,9 @@ qt5_use_modules(mainwindow Widgets PrintSupport)
 add_library(qcustomplot qcustomplot.cpp)
 qt5_use_modules(qcustomplot Widgets PrintSupport)
 
+add_library(parsedatafromudp parsedatafromudp.cpp)
+target_link_libraries (parsedatafromudp boost_system)
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries (${PROJECT_NAME} mainwindow qcustomplot)
+target_link_libraries (${PROJECT_NAME} mainwindow qcustomplot parsedatafromudp)
 qt5_use_modules(${PROJECT_NAME} Core Gui)

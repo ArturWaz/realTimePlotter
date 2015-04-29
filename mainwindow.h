@@ -45,13 +45,9 @@
 #include <QMainWindow>
 #include <QTimer>
 #include "qcustomplot.h" // the header file of QCustomPlot. Don't forget to add it to your project, if you use an IDE, so it gets compiled.
+#include "parsedatafromudp.h"
 
 
-struct DataFromExternalSource {
-    size_t numberOfMeasurements_;
-    float time_;
-    float elements_[9];
-};
 
 
 namespace Ui {
