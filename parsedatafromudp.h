@@ -29,10 +29,10 @@ struct DataFromExternalSource {
 
 class ParseDataFromUDP {
 
+    static size_t const maxLength = 99;
     boost::asio::ip::udp::socket socket_;
     boost::asio::ip::udp::endpoint remote_endpoint_;
     boost::array<char, maxLength> recv_buffer_;
-    static uint8_t const maxLength = 99;
 
 
     void start_receive();

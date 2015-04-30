@@ -99,9 +99,9 @@ void MainWindow::setupRealTimePlot(QCustomPlot *customPlot) {
   if (num < numberOfMeasurements_) {
 
       customPlot->addGraph();
-      customPlot->graph(num)->setPen(QPen(Qt::blue));
+      customPlot->graph(num)->setPen(QPen(Qt::green));
       customPlot->addGraph();
-      customPlot->graph(num+1)->setPen(QPen(Qt::blue));
+      customPlot->graph(num+1)->setPen(QPen(Qt::green));
       customPlot->graph(num+1)->setLineStyle(QCPGraph::lsNone);
       customPlot->graph(num+1)->setScatterStyle(QCPScatterStyle::ssDisc);
 
