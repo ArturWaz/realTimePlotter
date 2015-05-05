@@ -28,14 +28,18 @@
 #include <iostream>
 #include <stdexcept>
 #include "mainwindow.h"
+#include <boost/interprocess/shared_memory_object.hpp>
+
 
 int main(int argc, char *argv[])
 {
+    boost::interprocess::named_mutex::remove((std::string("realTimePlotter_float")+std::string("_mtx")).c_str());
+    boost::interprocess::shared_memory_object::remove("realTimePlotter_float");
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
   QApplication::setGraphicsSystem("raster");
 #endif
 
-  size_t numberOfMeasurements = 0;
+  int numberOfMeasurements = 0;
   if (argc == 2) {
     try {
           numberOfMeasurements = std::stoi(std::string(argv[1]),nullptr);

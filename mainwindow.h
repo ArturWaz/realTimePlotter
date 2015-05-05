@@ -45,41 +45,45 @@
 #include <QMainWindow>
 #include <QTimer>
 #include "qcustomplot.h" // the header file of QCustomPlot. Don't forget to add it to your project, if you use an IDE, so it gets compiled.
-#include "parsedatafromudp.h"
-
-
+#include <thread>
+#include <iostream>
+#include "SharedTable.h"
 
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
-  Q_OBJECT
+class MainWindow : public QMainWindow {
+    Q_OBJECT
   
 public:
-  explicit MainWindow(size_t numberOfMeasurements, QWidget *parent = 0);
-  ~MainWindow();
+    explicit MainWindow(int numberOfMeasurements, QWidget *parent = 0);
+    ~MainWindow();
 
 
-  void setupRealTimePlot(QCustomPlot *customPlot);
+    void setupRealTimePlot(QCustomPlot *customPlot);
 
+    //void setupRealtimeDataDemo(QCustomPlot *customPlot);
 
-  void setupRealtimeDataDemo(QCustomPlot *customPlot);
 
 public slots:
-  void updateData(DataFromExternalSource &newData);
-  void refreshPlot();
+    void refreshPlot();
+    void updateData();
 
-private slots:
-  void realtimeDataSlot();
+//private slots:
+    //void realtimeDataSlot();
   
 private:
-  size_t numberOfMeasurements_;
-  Ui::MainWindow *ui;
-  QTimer dataTimer;
-  QCPItemTracer *itemDemoPhaseTracer;
+
+    int numberOfMeasurements_;
+    Ui::MainWindow *ui;
+    QTimer plotRefreshTimer_;
+    QTimer readDataTimer_;
+    //QCPItemTracer *itemDemoPhaseTracer_;
+    SharedTable<float> sharedTable_;
+    float previousTime;
+
 };
 
 #endif // MAINWINDOW_H

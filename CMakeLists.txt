@@ -13,6 +13,9 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_SHARED_LINKER_FLAGS "-static")
 set(CMAKE_CXX_FLAGS "-std=c++11")
+if ( UNIX )
+    set( CMAKE_CXX_FLAGS "-pthread ${CMAKE_CXX_FLAGS}" )
+endif ( UNIX )
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
@@ -20,15 +23,19 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 
 
+add_library(sharedtable SharedTable.cpp)
+target_link_libraries (sharedtable rt)
+
+
 add_library(mainwindow mainwindow.cpp)
+target_link_libraries(mainwindow sharedtable)
 qt5_use_modules(mainwindow Widgets PrintSupport)
+
 
 add_library(qcustomplot qcustomplot.cpp)
 qt5_use_modules(qcustomplot Widgets PrintSupport)
 
-add_library(parsedatafromudp parsedatafromudp.cpp)
-target_link_libraries (parsedatafromudp boost_system)
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries (${PROJECT_NAME} mainwindow qcustomplot parsedatafromudp)
+target_link_libraries (${PROJECT_NAME} mainwindow qcustomplot)
 qt5_use_modules(${PROJECT_NAME} Core Gui)
