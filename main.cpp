@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
   QApplication::setGraphicsSystem("raster");
 #endif
 
-  int numberOfMeasurements = 0;
+  int numberOfMeasurements = 3;
   if (argc == 2) {
     try {
           numberOfMeasurements = std::stoi(std::string(argv[1]),nullptr);
