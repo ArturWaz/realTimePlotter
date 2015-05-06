@@ -19,7 +19,7 @@
      <widget class="QCustomPlot" name="customPlot" native="true"/>
     </item>
     <item>
-     <widget class="QSlider" name="horizontalSlider">
+     <widget class="QSlider" name="timeSlider">
       <property name="enabled">
        <bool>true</bool>
       </property>

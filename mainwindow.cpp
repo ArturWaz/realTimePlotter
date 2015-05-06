@@ -164,7 +164,7 @@ void MainWindow::setupRealTimePlot(QCustomPlot *customPlot) {
 
 void MainWindow::refreshPlot() {
 
-    ui->customPlot->xAxis->rescale();
+    ui->customPlot->xAxis->setRange((previousTime-10.)+double(ui->timeSlider->value())/100,previousTime);
     ui->customPlot->replot();
 
     ulong numberOfPoints = 0;
@@ -181,9 +181,8 @@ void MainWindow::refreshPlot() {
 
 void MainWindow::updateData() {
     float actualData[10];
-    //std::cout << "asdfasf\n";
     sharedTable_.readData(actualData);
-    if (actualData[0] != previousTime) {
+    if (actualData[0] > previousTime) {
         previousTime = actualData[0];
         for (int i = 0; i < numberOfMeasurements_; ++i) {
             ui->customPlot->graph(i*2)->addData(previousTime, actualData[i+1]); // line
@@ -191,6 +190,13 @@ void MainWindow::updateData() {
             ui->customPlot->graph(i*2)->rescaleValueAxis(); // line
             ui->customPlot->graph(i*2+1)->clearData(); // dot
             ui->customPlot->graph(i*2+1)->addData(previousTime, actualData[i+1]); // dot
+        }
+    }
+    if (actualData[0] < previousTime) {
+        previousTime = actualData[0];
+        for (int i = 0; i < numberOfMeasurements_; ++i) {
+            ui->customPlot->graph(i*2)->clearData(); // line
+            ui->customPlot->graph(i*2+1)->clearData(); // dot
         }
     }
 }
