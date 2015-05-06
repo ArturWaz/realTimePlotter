@@ -61,26 +61,20 @@ public:
     explicit MainWindow(int numberOfMeasurements, QWidget *parent = 0);
     ~MainWindow();
 
-
     void setupRealTimePlot(QCustomPlot *customPlot);
 
-    //void setupRealtimeDataDemo(QCustomPlot *customPlot);
-
-
 public slots:
-    void refreshPlot();
     void updateData();
 
-//private slots:
-    //void realtimeDataSlot();
-  
+private slots:
+    void refreshPlot();
+
 private:
 
     int numberOfMeasurements_;
     Ui::MainWindow *ui;
     QTimer plotRefreshTimer_;
     QTimer readDataTimer_;
-    //QCPItemTracer *itemDemoPhaseTracer_;
     SharedTable<float> sharedTable_;
     float previousTime;
 
