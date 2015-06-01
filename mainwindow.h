@@ -78,6 +78,9 @@ private:
     SharedTable<float> sharedTable_;
     float previousTime;
 
+    float yMax;
+    float yMin;
+
 };
 
 #endif // MAINWINDOW_H

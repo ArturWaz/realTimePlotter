@@ -40,7 +40,7 @@
 *************************************************************************************************************/
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "build/ui_mainwindow.h"
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QScreen>
@@ -55,7 +55,9 @@ MainWindow::MainWindow(int numberOfMeasurements, QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow),
         sharedTable_(boost::interprocess::create_only,"realTimePlotter_float",boost::interprocess::read_write,10),
         numberOfMeasurements_(numberOfMeasurements),
-        previousTime(-0.0f) {
+        previousTime(-0.0f),
+        yMin(-0.5f),
+        yMax(0.5f) {
 
     ui->setupUi(this);
     setGeometry(400, 250, 542, 390);
@@ -164,7 +166,17 @@ void MainWindow::setupRealTimePlot(QCustomPlot *customPlot) {
 
 void MainWindow::refreshPlot() {
 
-    ui->customPlot->xAxis->setRange((previousTime-10.)+double(ui->timeSlider->value())/100,previousTime);
+    ui->customPlot->xAxis->setRange((previousTime - 10.) + double(ui->timeSlider->value()) / 100, previousTime);
+
+    if (ui->autoScalling->isChecked()) {
+        ui->customPlot->yAxis->setRange(yMin,yMax);
+    } else {
+        float level = ui->levelSignificand->value()*std::pow(10,ui->levelMagnitude->value());
+        float width = ui->widthSignificand->value()*std::pow(10,ui->widthMagnitude->value())/2;
+        ui->customPlot->yAxis->setRange(level - width, level + width);
+        ui->levelDisplay->display(level);
+        ui->widthDisplay->display(width*2);
+    }
     ui->customPlot->replot();
 
     ulong numberOfPoints = 0;
@@ -172,7 +184,7 @@ void MainWindow::refreshPlot() {
         numberOfPoints += ui->customPlot->graph(i*2)->data()->count();
     ui->statusBar->showMessage(
         QString("%1 FPS, Total Data points: %2")
-        .arg(double(1000.0/double(plotRefreshTimer_.interval())), 0, 'f', 2)
+        .arg(1000.0/double(plotRefreshTimer_.interval()), 0, 'f', 2)
         .arg(numberOfPoints)
         , 0);
 }
@@ -187,53 +199,20 @@ void MainWindow::updateData() {
         for (int i = 0; i < numberOfMeasurements_; ++i) {
             ui->customPlot->graph(i*2)->addData(previousTime, actualData[i+1]); // line
             ui->customPlot->graph(i*2)->removeDataBefore(previousTime-10); // line
-            ui->customPlot->graph(i*2)->rescaleValueAxis(); // line
             ui->customPlot->graph(i*2+1)->clearData(); // dot
             ui->customPlot->graph(i*2+1)->addData(previousTime, actualData[i+1]); // dot
+            if (actualData[i+1] > yMax) yMax = actualData[i+1];
+            else if (actualData[i+1] < yMin) yMin = actualData[i+1];
         }
     }
     if (actualData[0] < previousTime) {
         previousTime = actualData[0];
+        yMax = 0.5f;
+        yMin = -0.5f;
         for (int i = 0; i < numberOfMeasurements_; ++i) {
             ui->customPlot->graph(i*2)->clearData(); // line
             ui->customPlot->graph(i*2+1)->clearData(); // dot
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
