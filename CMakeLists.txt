@@ -13,9 +13,9 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_SHARED_LINKER_FLAGS "-static")
 set(CMAKE_CXX_FLAGS "-std=c++11")
-if ( UNIX )
+if (UNIX)
     set( CMAKE_CXX_FLAGS "-pthread ${CMAKE_CXX_FLAGS}" )
-endif ( UNIX )
+endif (UNIX)
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
@@ -37,6 +37,17 @@ qt5_use_modules(mainwindow Widgets PrintSupport)
 
 
 
+
 add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries (${PROJECT_NAME} mainwindow qCustomPlot)
 qt5_use_modules(${PROJECT_NAME} Core Gui)
+
+
+
+
+
+set(PROJECT_NAME testSender)
+project(${PROJECT_NAME})
+
+add_executable(${PROJECT_NAME} testSender.cpp)
+target_link_libraries (${PROJECT_NAME} sharedMemory)
