@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 3.0.2)
 set(PROJECT_NAME onlinePlotter)
 project(${PROJECT_NAME})
 
-#set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.4.1\\5.4\\mingw491_32")
-#set(CMAKE_PREFIX_PATH CMAKE_PREFIX_PATH "C:\\boost\\")
+#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:\\Qt\\Qt5.4.1\\5.4\\mingw491_32")
+#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:\\boost\\")
 
 
 set(CMAKE_AUTOMOC ON)
@@ -23,19 +23,20 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 
 
-add_library(sharedtable SharedTable.cpp)
-target_link_libraries (sharedtable rt)
+include_directories(sharedMemory)
+add_subdirectory(sharedMemory)
+
+
+include_directories(qCustomPlot)
+add_subdirectory(qCustomPlot)
 
 
 add_library(mainwindow mainwindow.cpp)
-target_link_libraries(mainwindow sharedtable)
+target_link_libraries(mainwindow sharedMemory)
 qt5_use_modules(mainwindow Widgets PrintSupport)
 
 
-add_library(qcustomplot qcustomplot.cpp)
-qt5_use_modules(qcustomplot Widgets PrintSupport)
-
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries (${PROJECT_NAME} mainwindow qcustomplot)
+target_link_libraries (${PROJECT_NAME} mainwindow qCustomPlot)
 qt5_use_modules(${PROJECT_NAME} Core Gui)

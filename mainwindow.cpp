@@ -39,8 +39,6 @@
 **                                                                                                         **
 *************************************************************************************************************/
 
-#include "mainwindow.h"
-#include "build/ui_mainwindow.h"
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QScreen>
@@ -48,12 +46,14 @@
 #include <QMetaEnum>
 #include <cstdlib>
 
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 
 
 MainWindow::MainWindow(int numberOfMeasurements, QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow),
-        sharedTable_(boost::interprocess::create_only,"realTimePlotter_float",boost::interprocess::read_write,10),
+        sharedTable_("realTimePlotter_float",10,boost::interprocess::read_write),
         numberOfMeasurements_(numberOfMeasurements),
         previousTime(-0.0f),
         yMin(-0.5f),

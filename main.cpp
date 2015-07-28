@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
 {
     boost::interprocess::named_mutex::remove((std::string("realTimePlotter_float")+std::string("_mtx")).c_str());
     boost::interprocess::shared_memory_object::remove("realTimePlotter_float");
+
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
   QApplication::setGraphicsSystem("raster");
 #endif
